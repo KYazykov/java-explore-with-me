@@ -1,4 +1,4 @@
-//drop table if exists stats;
+//*drop table if exists stats;
 //drop table if exists applications;
 
 create table if not exists applications
