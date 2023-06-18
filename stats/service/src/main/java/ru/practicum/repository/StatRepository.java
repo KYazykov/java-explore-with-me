@@ -25,10 +25,10 @@ public interface StatRepository extends JpaRepository<Stat, Long> {
             + "order by count (distinct s.ip) desc ")
     List<StatWithHits> findAllUniqueWhenUriIsNotEmpty(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query("select new ru.practicum.dto.StatWithHits(s.app.app, s.ip, count(s.uri)) "
+    @Query("select new ru.practicum.dto.StatWithHits(s.app.app, s.uri, count(s.ip)) "
             + "from Stat s where s.timestamp between ?1 and ?2 "
             + " group by s.app.app, s.uri "
-            + " order by count(s.uri) desc")
+            + " order by count(s.ip) desc")
     List<StatWithHits> findAllWhenUriIsEmpty(LocalDateTime start, LocalDateTime end);
 
     @Query("select new ru.practicum.dto.StatWithHits(s.app.app, s.uri, count (s.ip))"
