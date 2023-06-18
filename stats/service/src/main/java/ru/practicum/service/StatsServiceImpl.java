@@ -29,6 +29,8 @@ public class StatsServiceImpl implements StatsService {
                 .orElseGet(() -> applicationService.save(new Application(statDto.getApp())));
 
         Stat stat = statMapper.mapFromSaveToModel(statDto);
+        stat.setUri(statDto.getUri());
+        stat.setIp(statDto.getIp());
         stat.setApp(application);
         statRepository.save(stat);
     }
