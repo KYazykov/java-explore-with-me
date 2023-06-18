@@ -25,7 +25,6 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void save(StatsDtoForSave statDto) {
-        //Если нет записи об этой программе, то записываем её в БД.
         Application application = applicationService.getByName(statDto.getApp())
                 .orElseGet(() -> applicationService.save(new Application(statDto.getApp())));
 
