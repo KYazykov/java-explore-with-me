@@ -28,7 +28,7 @@ public interface StatRepository extends JpaRepository<Stat, Long> {
     @Query("select new ru.practicum.dto.StatWithHits(s.app.app, s.uri, count(s.ip)) "
             + "from Stat s where s.timestamp between ?1 and ?2 "
             + " group by s.app.app, s.uri "
-            + " order by count(s.ip) desc")
+            )
     List<StatWithHits> findAllWhenUriIsEmpty(LocalDateTime start, LocalDateTime end);
 
     @Query("select new ru.practicum.dto.StatWithHits(s.app.app, s.uri, count (s.ip))"
