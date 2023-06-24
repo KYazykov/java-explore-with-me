@@ -43,7 +43,6 @@ public class StatsServiceImpl implements StatsService {
         if (end.isBefore(start)) {
             throw new DataException("Дата окончания не может быть раньше даты начала");
         }
-
         if (unique) {
             if (uris == null || uris.isEmpty()) {
                 log.info("Получение статистики: в запросе эндпоинтов нет, unique = true");
