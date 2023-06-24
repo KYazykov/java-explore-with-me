@@ -38,6 +38,11 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<StatsDtoForView> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<StatWithHits> result;
+
+        if (end.isBefore(start)) {
+            throw new RuntimeException("Дата окончания не может быть раньше даты начала");
+        }
+
         if (unique) {
             if (uris == null || uris.isEmpty()) {
                 log.info("Получение статистики: в запросе эндпоинтов нет, unique = true");
