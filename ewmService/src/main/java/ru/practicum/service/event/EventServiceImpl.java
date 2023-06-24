@@ -108,6 +108,9 @@ public class EventServiceImpl implements EventService {
                 .rangeEnd(rangeEnd)
                 .text("%" + text.trim().toLowerCase() + "%").build();
 
+        if (userIds == null && states == null && categories == null && rangeStart == null && rangeEnd == null && text.isBlank()) {
+            return eventMapper.mapFromModelListToFullDtoList(eventRepository.findAll(pageable).toList());
+        }
 
         BooleanBuilder booleanBuilderForStates = new BooleanBuilder();
         if (states != null) {
@@ -137,6 +140,7 @@ public class EventServiceImpl implements EventService {
                 .add(predicateForText)
                 .add(booleanBuilderForStates.getValue())
                 .buildAnd();
+
         List<Event> events = eventRepository.findAll(filterForAll, pageable).toList();
 
 
@@ -165,6 +169,12 @@ public class EventServiceImpl implements EventService {
                         "paid:{},rangeStart:{},rangeEnd:{},\nonlyAvailable:{},sort:{},from:{}, size:{}",
                 text, categoriesIds, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         Sort sortForResponse;
+        if (rangeStart != null && rangeEnd != null) {
+            if (rangeStart.isAfter(rangeEnd)) {
+                throw new InvalidDateTimeException("Дата окончания мероприятия не может быть раньше даты начала");
+            }
+        }
+
 
         if (sort == null || sort.isBlank() || sort.equalsIgnoreCase("EVENT_DATE")) {
             sortForResponse = Sort.by("eventDate").ascending();

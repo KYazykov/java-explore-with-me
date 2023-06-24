@@ -81,6 +81,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         } else {
             participationRequest.setStatusRequest(StatusRequest.CONFIRMED);
         }
+        if (eventFromDb.getParticipantLimit() == 0) {
+            participationRequest.setStatusRequest(StatusRequest.CONFIRMED);
+        }
 
         participationRequest.setEvent(eventFromDb);
         participationRequest.setCreated(LocalDateTime.now());
