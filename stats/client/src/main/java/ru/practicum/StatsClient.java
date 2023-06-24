@@ -64,6 +64,7 @@ public class StatsClient {
         log.info(response.toString());
         return response;
     }
+
     public void save(StatsDtoForSave statsDtoForSave) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
