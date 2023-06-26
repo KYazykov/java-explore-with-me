@@ -3,6 +3,7 @@ package ru.practicum.exception.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -105,13 +106,14 @@ public class ErrorHandler {
         return apiError;
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleInternalServerException(final Exception e) {
-        log.debug("Получен статус 500 INTERNAL_SERVER_ERROR {}", e.getMessage(), e);
-        ApiError apiError = new ApiError(e.getMessage(),
-                "Ошибка внутреннего сервера",
-                HttpStatus.INTERNAL_SERVER_ERROR);
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleMissingServletRequestParameterException(final MissingServletRequestParameterException ex) {
+        log.debug("Ошибка 400 (MissingServletRequestParameterException). {}\"", ex.getMessage(), ex);
+        ApiError apiError = new ApiError(ex.getMessage(),
+                "Запрашиваемая операция не может быть выполнена.",
+                HttpStatus.BAD_REQUEST);
         return apiError;
     }
 }

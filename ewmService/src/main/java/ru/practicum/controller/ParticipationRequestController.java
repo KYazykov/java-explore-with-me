@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.request.ParticipationRequestService;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class ParticipationRequestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto addRequest(@PathVariable @Positive Long userId,
-                                              @RequestParam @Positive Long eventId) {
+                                              @RequestParam @NotNull Long eventId) {
         log.info("Добавление запроса от текущего пользователя на участие в событии.\t\tPOST  /users/{userId}/requess userId {}, eventId {}", userId, eventId);
         return participationRequestService.create(userId, eventId);
     }
