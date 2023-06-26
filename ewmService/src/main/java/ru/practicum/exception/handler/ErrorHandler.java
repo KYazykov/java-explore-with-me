@@ -104,4 +104,14 @@ public class ErrorHandler {
                 HttpStatus.CONFLICT);
         return apiError;
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleInternalServerException(final Exception e) {
+        log.debug("Получен статус 500 INTERNAL_SERVER_ERROR {}", e.getMessage(), e);
+        ApiError apiError = new ApiError(e.getMessage(),
+                "Ошибка внутреннего сервера",
+                HttpStatus.INTERNAL_SERVER_ERROR);
+        return apiError;
+    }
 }
