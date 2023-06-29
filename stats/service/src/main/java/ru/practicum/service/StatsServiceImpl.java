@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.StatWithHits;
 import ru.practicum.dto.StatsDtoForSave;
 import ru.practicum.dto.StatsDtoForView;
+import ru.practicum.exception.DataException;
 import ru.practicum.mapper.StatMapper;
 import ru.practicum.model.Application;
 import ru.practicum.model.Stat;
@@ -38,6 +39,10 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<StatsDtoForView> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<StatWithHits> result;
+
+        if (end.isBefore(start)) {
+            throw new DataException("Дата окончания не может быть раньше даты начала");
+        }
         if (unique) {
             if (uris == null || uris.isEmpty()) {
                 log.info("Получение статистики: в запросе эндпоинтов нет, unique = true");
