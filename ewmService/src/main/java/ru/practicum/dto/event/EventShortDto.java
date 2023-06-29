@@ -31,5 +31,6 @@ public class EventShortDto {
     private Integer confirmedRequests;
 
     private Integer views;
+    private Long comments;
 
 }
