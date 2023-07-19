@@ -20,6 +20,11 @@ import javax.validation.constraints.PositiveOrZero;
 public class CategoryAdminController {
     private final CategoryService categoryService;
 
+    /**
+     * Сохранение новой категории в БД.
+     *
+     * @return созданная категория.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto addCategory(@Validated(CreateObject.class) @RequestBody CategoryDto categoryDto) {
@@ -27,6 +32,11 @@ public class CategoryAdminController {
         return categoryService.save(categoryDto);
     }
 
+    /**
+     * Обновление категории в БД.
+     *
+     * @return обновленная категория.
+     */
     @PatchMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto updateCategory(@PositiveOrZero @PathVariable Long catId,

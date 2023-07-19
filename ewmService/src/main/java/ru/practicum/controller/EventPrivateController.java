@@ -28,6 +28,16 @@ import java.util.List;
 public class EventPrivateController {
     private final EventService eventService;
 
+    /**
+     * <p>Получение событий, добавленных текущим пользователем.</p>
+     * GET /users/{userId}/events
+     * <p>В случае, если по заданным фильтрам не найдено ни одного события, возвращает пустой список</p>
+     *
+     * @param userId ID пользователя.
+     * @param from   количество событий, которые нужно пропустить для формирования текущего набора.
+     * @param size   количество событий в наборе.
+     * @return список событий пользователя.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getMyEvents(@PathVariable @Positive Long userId,
@@ -37,6 +47,16 @@ public class EventPrivateController {
         return eventService.getMyEvents(userId, from, size);
     }
 
+    /**
+     * Добавление нового события.
+     * <p>POST /users/{userId}/events</p>
+     * Обратите внимание: дата и время на которые намечено событие не может быть раньше,
+     * чем через два часа от текущего момента.
+     *
+     * @param userId      ID пользователя.
+     * @param newEventDto добавляемое событие.
+     * @return сохранённое событие.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto addEvent(@PathVariable("userId") @Positive Long userId,
@@ -46,6 +66,14 @@ public class EventPrivateController {
         return eventService.create(userId, newEventDto);
     }
 
+    /**
+     * <p>Получение полной информации о событии, добавленном текущим пользователем.</p>
+     * GET /users/{userId}/events/{eventId}
+     * <p>В случае, если по заданным фильтрам не найдено ни одного события, возвращает пустой список</p>
+     *
+     * @param userId ID события.
+     * @return событие пользователя.
+     */
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventById(@PathVariable("userId") @Positive Long userId,
@@ -56,6 +84,14 @@ public class EventPrivateController {
         return eventService.getMyEventById(userId, eventId);
     }
 
+    /**
+     * Изменение события добавленного текущим пользователем
+     * <p>PATCH /users/{userId}/events</p>
+     *
+     * @param userId                 ID пользователя.
+     * @param updateEventUserRequest обновляющее событие.
+     * @return обновлённое событие.
+     */
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEvent(@PathVariable @Positive Long userId,
@@ -66,6 +102,15 @@ public class EventPrivateController {
         return eventService.updateEventUser(userId, eventId, updateEventUserRequest);
     }
 
+    /**
+     * <p>Получение информации о запросах на участие в событии текущего пользователя.</p>
+     * GET /users/{userId}/events/{eventId}/requests
+     * <p>В случае, если по заданным фильтрам не найдено ни одной заявки, возвращает пустой список.</p>
+     *
+     * @param userId  ID пользователя.
+     * @param eventId ID события.
+     * @return список запросов.
+     */
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequestsOld(@PathVariable @Positive Long userId,
@@ -74,6 +119,19 @@ public class EventPrivateController {
         return eventService.getRequestsEvent(userId, eventId);
     }
 
+    /**
+     * Изменение статуса (подтверждена, отменена) заявок на участие в событии текущего пользователя.
+     * <p>PATCH /users/{userId}/events/{eventId}/requests</p>
+     * <p>Обратите внимание:</p>
+     * <p>если для события лимит заявок равен 0 или отключена пре-модерация заявок,
+     * то подтверждение заявок не требуется;</p>
+     * <p>нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное
+     * событие (Ожидается код ошибки 409);</p>
+     * <p>статус можно изменить только у заявок, находящихся в состоянии
+     * ожидания (Ожидается код ошибки 409);</p>
+     * <p>если при подтверждении данной заявки лимит заявок для события исчерпан,
+     * то все неподтверждённые заявки необходимо отклонить.</p>
+     */
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusUpdateResult updateRequestsStatus(@Positive @PathVariable Long userId,

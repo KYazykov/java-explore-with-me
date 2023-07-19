@@ -22,6 +22,14 @@ public class CompilationPublicController {
 
     private final CompilationService compilationService;
 
+    /**
+     * <p>Получение подборок событий.</p>
+     * GET /compilations
+     *
+     * @param pinned искать только закрепленные/не закрепленные подборки.
+     * @param from   количество элементов, которые нужно пропустить для формирования текущего набора.
+     * @param size   количество элементов в наборе. Default value : 10
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CompilationDto> getCompilations(@RequestParam(required = false) boolean pinned,
@@ -31,6 +39,13 @@ public class CompilationPublicController {
         return compilationService.getCompilations(pinned, from, size);
     }
 
+    /**
+     * GET /compilations/{compId}
+     * <p>Получение подборки событий по его id.</p>
+     *
+     * @param compId ID подборки.
+     * @return подборка событий.
+     */
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@NotNull @PositiveOrZero @PathVariable Long compId) {
