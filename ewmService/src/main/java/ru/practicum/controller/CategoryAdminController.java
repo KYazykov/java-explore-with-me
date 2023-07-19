@@ -45,6 +45,9 @@ public class CategoryAdminController {
         return categoryService.update(catId, categoryDto);
     }
 
+    /**
+     * Удаление категории из БД.
+     */
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PositiveOrZero @PathVariable Long catId) {
