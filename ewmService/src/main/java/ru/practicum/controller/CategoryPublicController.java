@@ -20,6 +20,13 @@ import java.util.List;
 public class CategoryPublicController {
     private final CategoryService categoryService;
 
+    /**
+     * <p>Получение категорий.</p>
+     * GET /categories
+     *
+     * @param catId ID категории.
+     * @return категория.
+     */
     @GetMapping("/{catId}")
     @ResponseStatus(HttpStatus.OK)
     public CategoryDto getCategory(@Positive @PathVariable Long catId) {
@@ -27,6 +34,13 @@ public class CategoryPublicController {
         return categoryService.getById(catId);
     }
 
+    /**
+     * В случае, если по заданным фильтрам не найдено ни одной категории, возвращает пустой список.
+     *
+     * @param from количество категорий, которые нужно пропустить для формирования текущего набора.
+     * @param size количество категорий в наборе.
+     * @return список категорий.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getAllCategories(@PositiveOrZero @RequestParam(defaultValue = "0") Integer from,

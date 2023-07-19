@@ -18,6 +18,13 @@ import javax.validation.Valid;
 public class CompilationAdminController {
     private final CompilationService compilationService;
 
+    /**
+     * <p>Добавление новой подборки.</p>
+     * POST /admin/compilations
+     *
+     * @param newCompilationDto обновляющая подборка.
+     * @return обновлённая подборка.
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto addCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
@@ -25,6 +32,12 @@ public class CompilationAdminController {
         return compilationService.addCompilation(newCompilationDto);
     }
 
+    /**
+     * <p>Удаление подборки.</p>
+     * DELETE /admin/compilations/{compId}
+     *
+     * @param compId ID удаляемой подборки.
+     */
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeCompilation(@PathVariable Long compId) {

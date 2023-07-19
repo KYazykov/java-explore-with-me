@@ -20,6 +20,14 @@ import java.util.List;
 public class ParticipationRequestController {
     private final ParticipationRequestService participationRequestService;
 
+    /**
+     * GET /users/{userId}/requests
+     * <p>Получение информации о заявках текущего пользователя на участие в чужих событиях.</p>
+     * <p>В случае, если по заданным фильтрам не найдено ни одной заявки, возвращает пустой список.</p>
+     *
+     * @param userId ID пользователя.
+     * @return список заявок.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequests(@PathVariable @Positive Long userId) {
@@ -28,6 +36,17 @@ public class ParticipationRequestController {
         return participationRequestService.getRequestsByUserId(userId);
     }
 
+    /**
+     * Добавление запроса от текущего пользователя на участие в событии.
+     * <p>POST /users/{userId}/requests</p>
+     * Обратите внимание:
+     * <p>нельзя добавить повторный запрос.</p>
+     * инициатор события не может добавить запрос на участие в своём событии.
+     * <p>нельзя участвовать в неопубликованном событии.</p>
+     * если у события достигнут лимит запросов на участие - необходимо вернуть ошибку.
+     * <p>если для события отключена пре-модерация запросов на участие, то запрос должен автоматически перейти
+     * в состояние подтвержденного</p>
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto addRequest(@PathVariable @Positive Long userId,
@@ -36,6 +55,10 @@ public class ParticipationRequestController {
         return participationRequestService.create(userId, eventId);
     }
 
+    /**
+     * <p>Отмена своего запроса на участие в событии.</p>
+     * PATCH /users/{userId}/requests/{requestId}/cancel
+     */
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable("userId") @Positive Long userId,
                                                  @PathVariable(name = "requestId") @Positive Long requestId) {

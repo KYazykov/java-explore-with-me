@@ -24,6 +24,19 @@ import java.util.List;
 public class EventAdminController {
     private final EventService eventService;
 
+    /**
+     * Эндпоинт возвращает полную информацию обо всех событиях подходящих под переданные условия.
+     *
+     * @param users      список id пользователей, чьи события нужно найти.
+     * @param states     список состояний в которых находятся искомые события.
+     * @param categories список id категорий в которых будет вестись поиск.
+     * @param rangeStart дата и время не раньше которых должно произойти событие.
+     * @param rangeEnd   дата и время не позже которых должно произойти событие.
+     * @param text       текст поиска в аннотации и описании.
+     * @param from       количество событий, которые нужно пропустить для формирования текущего набора.
+     * @param size       количество событий в наборе.
+     * @return список событий.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getEventsForAdmin(@RequestParam(required = false) List<Long> users,
@@ -50,6 +63,15 @@ public class EventAdminController {
         return eventService.updateEventAdmin(eventId, updateEventAdminRequest);
     }
 
+    /**
+     * Публикация события.
+     * <p>PATCH /admin/events/{eventId}/publish</p>
+     * Обратите внимание:
+     * <p>дата начала события должна быть не ранее, чем за час от даты публикации.</p>
+     * <p>событие должно быть в состоянии ожидания публикации.</p>
+     *
+     * @param eventId ID публикуемого события.
+     */
     @PatchMapping("/{eventId}/publish")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto publishEvent(@Positive @PathVariable Long eventId) {

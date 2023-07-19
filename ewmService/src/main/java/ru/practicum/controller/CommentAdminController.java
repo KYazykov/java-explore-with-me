@@ -17,6 +17,11 @@ import javax.validation.constraints.PositiveOrZero;
 public class CommentAdminController {
     private final CommentService commentService;
 
+    /**
+     * Удаление комментария администратором.
+     *
+     * @param comId ID комментария.
+     */
     @DeleteMapping("/{comId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteByAdmin(@PathVariable @PositiveOrZero Long comId) {

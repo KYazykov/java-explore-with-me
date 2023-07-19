@@ -42,6 +42,14 @@ public class CommentUserController {
         return commentService.getCommentById(userId, commId);
     }
 
+    /**
+     * Обновление комментария.
+     *
+     * @param comId            ID комментария.
+     * @param userId           ID пользователя, обновляющего комментарий.
+     * @param updateCommentDto обновляемый комментарий.
+     * @return обновлённый комментарий.
+     */
     @PatchMapping("/{comId}/user/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public CommentForView updateComment(@PathVariable @PositiveOrZero Long comId,
@@ -52,6 +60,12 @@ public class CommentUserController {
         return commentService.updateComment(comId, userId, updateCommentDto);
     }
 
+    /**
+     * Удаление пользователем своего комментария.
+     *
+     * @param comId  ID комментария.
+     * @param userId ID пользователя.
+     */
     @DeleteMapping("/{comId}/user/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteByUser(@PathVariable @PositiveOrZero Long comId,
@@ -60,6 +74,9 @@ public class CommentUserController {
         commentService.deleteCommentByUser(comId, userId);
     }
 
+    /**
+     * Получение списка заявок к событию с ID = {}.
+     */
     @GetMapping("/event/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public List<CommentForView> getAllCommentEvent(@PathVariable @PositiveOrZero Long eventId,
